@@ -1,0 +1,11 @@
+# PluginHider Configuration
+
+# Enable or disable plugin hiding
+enabled: true
+
+# Custom message settings
+messages:
+  # Enable custom messages (if false, will use default messages)
+  custom-enabled: false
+  # Message to show when listing plugins (use & for color codes)
+  plugins-list: "&fPlugins (0): " 

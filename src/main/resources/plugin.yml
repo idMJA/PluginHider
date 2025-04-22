@@ -1,0 +1,21 @@
+name: PluginHider
+version: '1.0-SNAPSHOT'
+main: my.mjba.pluginHider.PluginHider
+api-version: '1.13'
+description: A plugin to hide the plugin list from regular users
+author: iaMJ
+
+commands:
+  pluginhider:
+    description: Main command for PluginHider
+    usage: /<command> [reload|toggle|status]
+    permission: pluginhider.admin
+    aliases: [plhide]
+
+permissions:
+  pluginhider.admin:
+    description: Allows access to PluginHider commands
+    default: op
+  pluginhider.see:
+    description: Allows seeing the plugin list
+    default: op
