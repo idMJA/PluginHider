@@ -83,6 +83,11 @@ public final class PluginHider extends JavaPlugin implements Listener {
         
         String command = event.getCommand().toLowerCase();
         if (command.equals("plugins") || command.equals("pl")) {
+            // Allow console to see all plugins
+            if (!(event.getSender() instanceof Player)) {
+                return;
+            }
+            
             event.setCancelled(true);
             event.getSender().sendMessage(pluginsListMessage);
         }
