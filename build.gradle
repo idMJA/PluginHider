@@ -52,6 +52,7 @@ processResources {
 shadowJar {
     archiveClassifier = ''
     minimize()
+    dependsOn jar
 }
 
 build.dependsOn shadowJar
@@ -59,4 +60,6 @@ build.dependsOn shadowJar
 runServer {
     minecraftVersion("1.20")
     dependsOn shadowJar
+    mustRunAfter shadowJar
+    pluginJars.from(shadowJar.archiveFile)
 }
