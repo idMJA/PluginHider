@@ -125,7 +125,4 @@ public final class PluginHider extends JavaPlugin implements Listener {
         saveConfig();
     }
 
-    public String getPluginsListMessage() {
-        return pluginsListMessage;
-    }
 }
