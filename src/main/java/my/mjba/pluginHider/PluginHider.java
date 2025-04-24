@@ -10,9 +10,10 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public final class PluginHider extends JavaPlugin implements Listener {
     private boolean enabled;
-    private boolean useCustomMessages;
     private String pluginsListMessage;
     private static final String ADMIN_PERMISSION = "pluginhider.admin";
     private static final String VIEW_PERMISSION = "pluginhider.view";
@@ -34,7 +35,7 @@ public final class PluginHider extends JavaPlugin implements Listener {
         
         // Register command
         PluginHiderCommand commandExecutor = new PluginHiderCommand(this);
-        getCommand("pluginhider").setExecutor(commandExecutor);
+        Objects.requireNonNull(getCommand("pluginhider")).setExecutor(commandExecutor);
         
         getLogger().info("PluginHider has been enabled!");
     }
@@ -47,9 +48,9 @@ public final class PluginHider extends JavaPlugin implements Listener {
     private void loadConfig() {
         FileConfiguration config = getConfig();
         enabled = config.getBoolean("enabled", true);
-        
+
         // Load message settings
-        useCustomMessages = config.getBoolean("messages.custom-enabled", false);
+        boolean useCustomMessages = config.getBoolean("messages.custom-enabled", false);
         if (useCustomMessages) {
             pluginsListMessage = translateColors(config.getString("messages.plugins-list", "&fPlugins (0): "));
         } else {
@@ -69,9 +70,8 @@ public final class PluginHider extends JavaPlugin implements Listener {
         String buffer = event.getBuffer().toLowerCase();
         if (!buffer.startsWith("/plugins") && !buffer.startsWith("/pl")) return;
         
-        if (event.getSender() instanceof Player) {
-            Player player = (Player) event.getSender();
-            if (!hasViewPermission(player)) {
+        if (event.getSender() instanceof Player player) {
+            if (hasViewPermission(player)) {
                 event.setCancelled(true);
             }
         }
@@ -100,7 +100,7 @@ public final class PluginHider extends JavaPlugin implements Listener {
         String command = event.getMessage().toLowerCase();
         if (command.startsWith("/plugins") || command.startsWith("/pl")) {
             Player player = event.getPlayer();
-            if (!hasViewPermission(player)) {
+            if (hasViewPermission(player)) {
                 event.setCancelled(true);
                 player.sendMessage(pluginsListMessage);
             }
@@ -108,7 +108,7 @@ public final class PluginHider extends JavaPlugin implements Listener {
     }
 
     private boolean hasViewPermission(Player player) {
-        return player.isOp() || player.hasPermission(VIEW_PERMISSION);
+        return !player.isOp() && !player.hasPermission(VIEW_PERMISSION);
     }
 
     public boolean hasAdminPermission(Player player) {

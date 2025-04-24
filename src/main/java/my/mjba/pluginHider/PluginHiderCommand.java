@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class PluginHiderCommand implements CommandExecutor {
     private final PluginHider plugin;
@@ -13,14 +14,13 @@ public class PluginHiderCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) {
             sendHelp(sender);
             return true;
         }
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             if (!plugin.hasAdminPermission(player)) {
                 sender.sendMessage("§cYou don't have permission to use this command!");
                 return true;
